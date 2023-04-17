@@ -6,6 +6,7 @@ import org.jfree.data.time.Year;
 import org.junit.Test;
 import java.util.Calendar;
 import java.util.TimeZone;
+import java.lang.Object;
 
 
 public class QuarterClassTest {
@@ -34,6 +35,7 @@ public class QuarterClassTest {
         assertEquals(year, quarter.getYear().getYear());
     }
 
+    /*************************************BUG**************************************************/
     @Test(expected = IllegalArgumentException.class)
     public void testParameterizedConstructorWithInvalidQuarterLower() 
     {
@@ -62,10 +64,10 @@ public class QuarterClassTest {
     @Test
     public void testParameterizedConstructorWithTime()
     {
-        //1900 + 122 = 2022
-        Date date = new Date(122, 0, 1); //january 1 , 2022
+        //1900 + 123 = 2023
+        Date date = new Date(123, 0, 1); //january 1 , 2022
         quarter = new Quarter(date);
-        Year year = new Year(2022);
+        Year year = new Year(2023);
         assertEquals(1, quarter.getQuarter());
         assertEquals(year, quarter.getYear());
     }
@@ -73,18 +75,36 @@ public class QuarterClassTest {
 
     // Testing Parameterized Constructor Quarter(java.util.Date time, java.util.TimeZone zone)
     @Test
-    public void testParameterizedConstructorWithTimeAndZone()
+    public void testParameterizedConstructorWithTimeAndZone()  // previous quarter in the same year
     {
-        //1900 + 122 = 2022
-        Date date = new Date(122, 0, 1); //january 1 , 2022
-        TimeZone timeZone = TimeZone.getTimeZone("UTC");
+        //1900 + 123 = 2023
+        Date date = new Date(123, 3, 1); //Apr 1 , 2023
+        TimeZone timeZone = TimeZone.getTimeZone("GMT+0");
 
         quarter = new Quarter(date, timeZone);
-        Year year = new Year(2022);
-        assertEquals(1, quarter.getQuarter());
+        Year year = new Year(2023);
+       
         assertEquals(year, quarter.getYear());
+        assertEquals(2, quarter.getQuarter());
     }
     
+    /*************************************BUG**************************************************/
+    // Testing Parameterized Constructor Quarter(java.util.Date time, java.util.TimeZone zone)
+    @Test
+    public void testParameterizedConstructorWithTimeAndZone2() // previous quarter in the previous year
+    {
+        //1900 + 123 = 2023
+        Date date = new Date(123, 0, 1); //january 1 , 2023
+        TimeZone timeZone = TimeZone.getTimeZone("GMT+0");
+
+        quarter = new Quarter(date, timeZone);
+        Year year = new Year(2023);
+        
+        assertEquals(year, quarter.getYear());
+        assertEquals(1, quarter.getQuarter());
+    }
+    
+
     // Testing Parameterized Constructor Quarter(int quarter, Year year)
     @Test
     public void testParameterizedConstuctor2()
@@ -121,6 +141,12 @@ public class QuarterClassTest {
         Year year = new Year(10000);
         quarter = new Quarter(1, year);
     }
+    /*
+    _________________________________________________________________________________________________________________
+                                            END OF TESTING CONSTRACTORS
+    _________________________________________________________________________________________________________________
+
+    */
 
 
     // Testing function compareTo(java.lang.Object o1)
@@ -272,6 +298,14 @@ public class QuarterClassTest {
     }
     
     // Testing function hashCode()
+    @Test
+    public void testHashCode() {
+        quarter = new Quarter(1, 2023);
+        int year = 2023;
+        int quart = 1;
+        int hash = ((year - 1900) * 3 * 37 + (25839 - (year - 1900) * 110) )+ (quart - 1) * 37 ;
+        assertEquals(hash, quarter.hashCode());
+    }
 
     // Testing function next()
     @Test
