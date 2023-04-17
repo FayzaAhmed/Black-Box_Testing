@@ -4,6 +4,8 @@ import java.util.Date;
 import java.time.Year;
 import org.jfree.data.time.Quarter;
 import org.junit.Test;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 
 public class QuarterClassTest {
@@ -11,7 +13,8 @@ public class QuarterClassTest {
 
     // Testing Default Constructor
     @Test
-    public void testDefaultConstructor() {
+    public void testDefaultConstructor() 
+    {
         quarter = new Quarter();
         assertEquals(2023, quarter.getYear().getYear());
         assertEquals(2, quarter.getQuarter());
@@ -20,7 +23,8 @@ public class QuarterClassTest {
 
     // Testing Parameterized Constructor Quarter(int quarter, int year)
     @Test
-    public void testParameterizedConstructorWithValidQuarterAndYear() {
+    public void testParameterizedConstructorWithValidQuarterAndYear() 
+    {
 
         int quart = 2;
         int year = 2023;
@@ -32,22 +36,26 @@ public class QuarterClassTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testParameterizedConstructorWithInvalidQuarterLower() {
+    public void testParameterizedConstructorWithInvalidQuarterLower() 
+    {
         quarter = new Quarter(0, 1900);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testParameterizedConstructorWithInvalidQuarterUpper() {
+    public void testParameterizedConstructorWithInvalidQuarterUpper() 
+    {
         quarter = new Quarter(5, 1900);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testParameterizedConstructorWithInvalidYearLower() {
+    public void testParameterizedConstructorWithInvalidYearLower() 
+    {
         quarter = new Quarter(1, 1800);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testParameterizedConstructorWithInvalidYearUpper() {
+    public void testParameterizedConstructorWithInvalidYearUpper() 
+    {
         quarter = new Quarter(1, 10000);
     }
 
@@ -138,10 +146,39 @@ public class QuarterClassTest {
         assertFalse(result);
     }
 
-
     // Testing function getFirstMillisecond(java.util.Calendar calendar)
+    @Test
+    public void testGetFirstMillisecond() 
+    {
+        // Set up a calendar with a specific time zone
+        TimeZone timeZone = TimeZone.getTimeZone("GMT+0");
+        Calendar calendar = Calendar.getInstance(timeZone);
+        
+        // Create a Quarter object for Q2 2023
+        Quarter quarter = new Quarter(2, 2023);
+        
+        // Set the calendar to the first day of the quarter
+        calendar.set(2023, 3, 1, 0, 0, 0); // April 1, 2023 00:00:00
+        
+        assertEquals(calendar.getTimeInMillis(), quarter.getFirstMillisecond(calendar), 1E+13);
+    }
 
     // Testing function getLastMillisecond(java.util.Calendar calendar)
+    @Test
+    public void testGetLastMillisecond() 
+    {
+        // Set up a calendar with a specific time zone
+        TimeZone timeZone = TimeZone.getTimeZone("GMT+0");
+        Calendar calendar = Calendar.getInstance(timeZone);
+        
+        // Create a Quarter object for Q1 2023
+        Quarter quarter = new Quarter(1, 2023);
+        
+        // Set the calendar to the last millisecond of the quarter
+        calendar.set(2023, 2, 31, 23, 59, 59); // March 31, 2023 23:59:59
+        
+        assertEquals(calendar.getTimeInMillis(), quarter.getLastMillisecond(calendar), 1E+13);
+    }
 
     // Testing function getQuarter()
     @Test
@@ -232,15 +269,15 @@ public class QuarterClassTest {
     }
     
     @Test(expected = IllegalArgumentException.class)
-    public void testParseQuarterInvalidInputs4() {
-        
+    public void testParseQuarterInvalidInputs4() 
+    {
         // Test case 4: Invalid input string (invalid year)
         Quarter.parseQuarter("Q2-ABC");        
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testParseQuarterInvalidInputs5() {
-        
+    public void testParseQuarterInvalidInputs5() 
+    {
         // Test case 5: Invalid input string (empty string)
         Quarter.parseQuarter("");        
     }
@@ -271,7 +308,6 @@ public class QuarterClassTest {
     }
 
 
-
     // Testing function toString()
     @Test
     public void testToString() 
@@ -279,7 +315,6 @@ public class QuarterClassTest {
         quarter = new Quarter(2, 2023);
         assertEquals("Q2/2023", quarter.toString());
     }
-
 
 
     /*
