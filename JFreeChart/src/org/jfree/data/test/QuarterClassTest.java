@@ -182,7 +182,8 @@ public class QuarterClassTest {
 
     // Testing function getQuarter()
     @Test
-    public void testGetQuarter() {
+    public void testGetQuarter() 
+    {
         quarter = new Quarter(2, 2023);
         assertEquals(2, quarter.getQuarter(), 1E-13);
     }
