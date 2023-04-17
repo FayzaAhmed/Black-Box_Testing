@@ -1,8 +1,8 @@
 package org.jfree.data.test;
 import static org.junit.Assert.*;
 import java.util.Date;
-import java.time.Year;
 import org.jfree.data.time.Quarter;
+import org.jfree.data.time.Year;
 import org.junit.Test;
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -25,14 +25,13 @@ public class QuarterClassTest {
     @Test
     public void testParameterizedConstructorWithValidQuarterAndYear() 
     {
-
         int quart = 2;
         int year = 2023;
         
         quarter = new Quarter(quart, year);
 
-        assertEquals(quart, quarter.getQuarter(), 1E-13);
-        assertEquals(year, quarter.getYear().getYear(), 1E-13);
+        assertEquals(quart, quarter.getQuarter());
+        assertEquals(year, quarter.getYear().getYear());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -60,8 +59,69 @@ public class QuarterClassTest {
     }
 
     // Testing Parameterized Constructor Quarter(java.util.Date time)
+    @Test
+    public void testParameterizedConstructorWithTime()
+    {
+        //1900 + 122 = 2022
+        Date date = new Date(122, 0, 1); //january 1 , 2022
+        quarter = new Quarter(date);
+        Year year = new Year(2022);
+        assertEquals(1, quarter.getQuarter());
+        assertEquals(year, quarter.getYear());
+    }
+
+
     // Testing Parameterized Constructor Quarter(java.util.Date time, java.util.TimeZone zone)
+    @Test
+    public void testParameterizedConstructorWithTimeAndZone()
+    {
+        //1900 + 122 = 2022
+        Date date = new Date(122, 0, 1); //january 1 , 2022
+        TimeZone timeZone = TimeZone.getTimeZone("UTC");
+
+        quarter = new Quarter(date, timeZone);
+        Year year = new Year(2022);
+        assertEquals(1, quarter.getQuarter());
+        assertEquals(year, quarter.getYear());
+    }
+    
     // Testing Parameterized Constructor Quarter(int quarter, Year year)
+    @Test
+    public void testParameterizedConstuctor2()
+    {
+        int quart = 2;
+        Year year = new Year(2023);
+        quarter = new Quarter(quart, year);
+        assertEquals(quart, quarter.getQuarter());
+        assertEquals(year, quarter.getYear());    
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testParameterizedConstructorWithInvalidQuarterLower2() 
+    {
+        quarter = new Quarter(0, 1900);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testParameterizedConstructorWithInvalidQuarterUpper2() 
+    {
+        quarter = new Quarter(5, 1900);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testParameterizedConstructorWithInvalidYearLower2() 
+    {
+        Year year = new Year(1800);
+        quarter = new Quarter(1, year);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testParameterizedConstructorWithInvalidYearUpper2() 
+    {
+        Year year = new Year(10000);
+        quarter = new Quarter(1, year);
+    }
+
 
     // Testing function compareTo(java.lang.Object o1)
     @Test
@@ -189,8 +249,27 @@ public class QuarterClassTest {
     }
 
     // Testing function getSerialIndex()
+    //according to the rules defined in the RegularTimePeriod which 'Quarter' extends
+    //the serial index is calculated based on the quarter and year with the formula:
+    // serialIndex = (year * 4) + quarter
+    @Test
+    public void testGetSerialIndex() 
+    {
+        int year = 2000;
+        int q = 1;
+        quarter = new Quarter(q, year);
+        long calculatedSerialIndex = (year * 4) + q;
+        assertEquals(calculatedSerialIndex, quarter.getSerialIndex());
+    }
 
     // Testing function getYear()
+    @Test
+    public void testGetYear() 
+    {
+        quarter = new Quarter(2, 2023);  
+        Year year  = new Year(2023);             
+        assertEquals(year, quarter.getYear());    
+    }
     
     // Testing function hashCode()
 
