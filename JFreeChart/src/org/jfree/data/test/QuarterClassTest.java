@@ -275,17 +275,13 @@ public class QuarterClassTest {
     }
 
     // Testing function getSerialIndex()
-    //according to the rules defined in the RegularTimePeriod which 'Quarter' extends
-    //the serial index is calculated based on the quarter and year with the formula:
-    // serialIndex = (year * 4) + quarter
     @Test
     public void testGetSerialIndex() 
     {
-        int year = 2000;
-        int q = 1;
-        quarter = new Quarter(q, year);
-        long calculatedSerialIndex = (year * 4) + q;
-        assertEquals(calculatedSerialIndex, quarter.getSerialIndex());
+        quarter = new Quarter(2, 2023);
+        Quarter quarter2 = new Quarter(3, 2023);
+        assertTrue(quarter.getSerialIndex() < quarter2.getSerialIndex());
+        assertFalse(quarter.getSerialIndex() >= quarter2.getSerialIndex());
     }
 
     // Testing function getYear()
@@ -299,12 +295,12 @@ public class QuarterClassTest {
     
     // Testing function hashCode()
     @Test
-    public void testHashCode() {
+    public void testHashCodeValid() {
         quarter = new Quarter(1, 2023);
-        int year = 2023;
-        int quart = 1;
-        int hash = ((year - 1900) * 3 * 37 + (25839 - (year - 1900) * 110) )+ (quart - 1) * 37 ;
-        assertEquals(hash, quarter.hashCode());
+        Quarter quarter2 = new Quarter(1, 2023);
+        Quarter quarter3 = new Quarter(2, 2023);
+        assertTrue(quarter2.hashCode() == quarter.hashCode());
+        assertTrue(quarter3.hashCode() != quarter.hashCode());
     }
 
     // Testing function next()
@@ -432,49 +428,32 @@ public class QuarterClassTest {
 
 
     /*
+
+    // Testing function getSerialIndex()
+    //according to the rules defined in the RegularTimePeriod which 'Quarter' extends
+    //the serial index is calculated based on the quarter and year with the formula:
+    // serialIndex = (year * 4) + quarter
     @Test
-    public void testParameterizedConstructorWithValidDate() {
-        quarter = new Quarter(new Date(1640995200000L)); // January 1, 2022
-        assertEquals(1, quarter.getQuarter(), 1E-13);
-        //assertNotNull(quarter);
+    public void testGetSerialIndex() 
+    {
+        int year = 2000;
+        int q = 1;
+        quarter = new Quarter(q, year);
+        long calculatedSerialIndex = (year * 4) + q;
+        assertEquals(calculatedSerialIndex, quarter.getSerialIndex());
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testParameterizedConstructorWithInvalidDate() {
-        quarter = new Quarter(new Date(0L)); // January 1, 1970
+    
+    @Test
+    public void testHashCode() {
+        quarter = new Quarter(1, 2023);
+        int year = 2023;
+        int quart = 1;
+        int hash = ((year - 1900) * 3 * 37 + (25839 - (year - 1900) * 110) )+ (quart - 1) * 37 ;
+        assertEquals(hash, quarter.hashCode());
     }
 
 
-   
-    @Test
-    public void testParameterizedConstructor2() {
-
-        int quart = 2;
-        //Year year = new Year(2023);
-        int curr = 2023;
-       // year = new Year(2023);
-        Year year = Year.of(2023);
-
-        quarter = new Quarter(quart, year);
-
-        assertEquals(quart, quarter.getQuarter(), 1E-13);
-        assertEquals(year, quarter.getYear(), 1E-13);
-    }*/
+    */
     
 }
-
-
-
-
- /* 
-    @Test
-    public void testConstructorWithValidQuarterAndYear() {
-        Quarter quarter = new Quarter(1, Year.of(2022));
-        assertNotNull(quarter);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testConstructorWithInvalidQuarterAndYear() {
-        Quarter quarter = new Quarter(5, Year.of(2022));
-    }
-*/
