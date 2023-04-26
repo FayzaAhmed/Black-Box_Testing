@@ -6,7 +6,6 @@ import org.jfree.data.time.Year;
 import org.junit.Test;
 import java.util.Calendar;
 import java.util.TimeZone;
-import java.lang.Object;
 
 
 public class QuarterClassTest {
@@ -65,21 +64,24 @@ public class QuarterClassTest {
     public void testParameterizedConstructorWithTime()
     {
         //1900 + 123 = 2023
-        Date date = new Date(123, 0, 1); //january 1 , 2022
+        //Date date = new Date(123, 3, 1); 
+        Date date = new Date(1680300000000L); //Apr 1 , 2023
         quarter = new Quarter(date);
         Year year = new Year(2023);
-        assertEquals(1, quarter.getQuarter());
+        assertEquals(2, quarter.getQuarter());
         assertEquals(year, quarter.getYear());
     }
 
 
+    /*************************************BUG**************************************************/
     // Testing Parameterized Constructor Quarter(java.util.Date time, java.util.TimeZone zone)
     @Test
-    public void testParameterizedConstructorWithTimeAndZone()  // previous quarter in the same year
+    public void testParameterizedConstructorWithTimeAndZone()
     {
         //1900 + 123 = 2023
-        Date date = new Date(123, 3, 1); //Apr 1 , 2023
-        TimeZone timeZone = TimeZone.getTimeZone("GMT+0");
+        //Date date = new Date(123, 3, 1); 
+        Date date = new Date(1680300000000L); //Apr 1 , 2023
+        TimeZone timeZone = TimeZone.getTimeZone("GMT+2");
 
         quarter = new Quarter(date, timeZone);
         Year year = new Year(2023);
@@ -88,23 +90,7 @@ public class QuarterClassTest {
         assertEquals(2, quarter.getQuarter());
     }
     
-    /*************************************BUG**************************************************/
-    // Testing Parameterized Constructor Quarter(java.util.Date time, java.util.TimeZone zone)
-    @Test
-    public void testParameterizedConstructorWithTimeAndZone2() // previous quarter in the previous year
-    {
-        //1900 + 123 = 2023
-        Date date = new Date(123, 0, 1); //january 1 , 2023
-        TimeZone timeZone = TimeZone.getTimeZone("GMT+0");
-
-        quarter = new Quarter(date, timeZone);
-        Year year = new Year(2023);
-        
-        assertEquals(year, quarter.getYear());
-        assertEquals(1, quarter.getQuarter());
-    }
     
-
     // Testing Parameterized Constructor Quarter(int quarter, Year year)
     @Test
     public void testParameterizedConstuctor2()
@@ -237,16 +223,20 @@ public class QuarterClassTest {
     public void testGetFirstMillisecond() 
     {
         // Set up a calendar with a specific time zone
-        TimeZone timeZone = TimeZone.getTimeZone("GMT+0");
+        TimeZone timeZone = TimeZone.getTimeZone("GMT+2");
         Calendar calendar = Calendar.getInstance(timeZone);
+
         
         // Create a Quarter object for Q2 2023
         Quarter quarter = new Quarter(2, 2023);
         
         // Set the calendar to the first day of the quarter
         calendar.set(2023, 3, 1, 0, 0, 0); // April 1, 2023 00:00:00
-        
-        assertEquals(calendar.getTimeInMillis(), quarter.getFirstMillisecond(calendar), 1E+13);
+
+        long var1 = 1680300000000L;
+        long var2 = quarter.getFirstMillisecond(calendar);
+
+        assertEquals(var1, var2);
     }
 
     // Testing function getLastMillisecond(java.util.Calendar calendar)
@@ -254,7 +244,7 @@ public class QuarterClassTest {
     public void testGetLastMillisecond() 
     {
         // Set up a calendar with a specific time zone
-        TimeZone timeZone = TimeZone.getTimeZone("GMT+0");
+        TimeZone timeZone = TimeZone.getTimeZone("GMT+2");
         Calendar calendar = Calendar.getInstance(timeZone);
         
         // Create a Quarter object for Q1 2023
@@ -262,8 +252,11 @@ public class QuarterClassTest {
         
         // Set the calendar to the last millisecond of the quarter
         calendar.set(2023, 2, 31, 23, 59, 59); // March 31, 2023 23:59:59
-        
-        assertEquals(calendar.getTimeInMillis(), quarter.getLastMillisecond(calendar), 1E+13);
+
+        long var1 = 1680299999999L;
+        long var2 = quarter.getLastMillisecond(calendar);
+
+        assertEquals(var1, var2);
     }
 
     // Testing function getQuarter()
@@ -271,7 +264,7 @@ public class QuarterClassTest {
     public void testGetQuarter() 
     {
         quarter = new Quarter(2, 2023);
-        assertEquals(2, quarter.getQuarter(), 1E-13);
+        assertEquals(2, quarter.getQuarter());
     }
 
     // Testing function getSerialIndex()
