@@ -46,6 +46,7 @@ public class QuarterClassTest {
     {
         quarter = new Quarter(5, 1900);
     }
+    /********************************************************************************************/
 
     @Test(expected = IllegalArgumentException.class)
     public void testParameterizedConstructorWithInvalidYearLower() 
@@ -63,8 +64,6 @@ public class QuarterClassTest {
     @Test
     public void testParameterizedConstructorWithTime()
     {
-        //1900 + 123 = 2023
-        //Date date = new Date(123, 3, 1); 
         Date date = new Date(1680300000000L); //Apr 1 , 2023
         quarter = new Quarter(date);
         Year year = new Year(2023);
@@ -73,13 +72,10 @@ public class QuarterClassTest {
     }
 
 
-    /*************************************BUG**************************************************/
     // Testing Parameterized Constructor Quarter(java.util.Date time, java.util.TimeZone zone)
     @Test
     public void testParameterizedConstructorWithTimeAndZone()
     {
-        //1900 + 123 = 2023
-        //Date date = new Date(123, 3, 1); 
         Date date = new Date(1680300000000L); //Apr 1 , 2023
         TimeZone timeZone = TimeZone.getTimeZone("GMT+2");
 
@@ -102,6 +98,7 @@ public class QuarterClassTest {
         assertEquals(year, quarter.getYear());    
     }
 
+    /*************************************BUG**************************************************/
     @Test(expected = IllegalArgumentException.class)
     public void testParameterizedConstructorWithInvalidQuarterLower2() 
     {
@@ -113,6 +110,7 @@ public class QuarterClassTest {
     {
         quarter = new Quarter(5, 1900);
     }
+    /********************************************************************************************/
 
     @Test(expected = IllegalArgumentException.class)
     public void testParameterizedConstructorWithInvalidYearLower2() 
@@ -183,7 +181,7 @@ public class QuarterClassTest {
 
     // Testing function equals(java.lang.Object obj)
     @Test
-    public void testEqualValidQuarterAndYear() 
+    public void testEqualQuarterAndYear() 
     {
         quarter = new Quarter(2, 2023);
         Quarter obj = new Quarter(2, 2023);
@@ -192,7 +190,7 @@ public class QuarterClassTest {
     }
 
     @Test
-    public void testEqualInvalidQuater() 
+    public void testNotEqualQuater() 
     {
         quarter = new Quarter(2, 2023);
         Quarter obj = new Quarter(3, 2023);
@@ -201,7 +199,7 @@ public class QuarterClassTest {
     }
 
     @Test
-    public void testEqualInvalidYear() 
+    public void testNotEqualYear() 
     {
         quarter = new Quarter(2, 2023);
         Quarter obj = new Quarter(2, 2022);
@@ -210,7 +208,7 @@ public class QuarterClassTest {
     }
 
     @Test
-    public void testEqualInvalidQuaterAndYear() 
+    public void testNotEqualQuaterAndYear() 
     {
         quarter = new Quarter(2, 2023);
         Quarter obj = new Quarter(3, 2022);
@@ -274,7 +272,6 @@ public class QuarterClassTest {
         quarter = new Quarter(2, 2023);
         Quarter quarter2 = new Quarter(3, 2023);
         assertTrue(quarter.getSerialIndex() < quarter2.getSerialIndex());
-        assertFalse(quarter.getSerialIndex() >= quarter2.getSerialIndex());
     }
 
     // Testing function getYear()
@@ -364,6 +361,7 @@ public class QuarterClassTest {
         Quarter.parseQuarter("Q2");        
     }
     
+    /*************************************BUG**************************************************/
     @Test(expected = IllegalArgumentException.class)
     public void testParseQuarterInvalidInputs3() 
     {
@@ -420,14 +418,12 @@ public class QuarterClassTest {
     }
 
 
-    /*
-
     // Testing function getSerialIndex()
     //according to the rules defined in the RegularTimePeriod which 'Quarter' extends
     //the serial index is calculated based on the quarter and year with the formula:
     // serialIndex = (year * 4) + quarter
     @Test
-    public void testGetSerialIndex() 
+    public void testGetSerialIndexFormula() 
     {
         int year = 2000;
         int q = 1;
@@ -438,7 +434,7 @@ public class QuarterClassTest {
 
     
     @Test
-    public void testHashCode() {
+    public void testHashCodeFormula() {
         quarter = new Quarter(1, 2023);
         int year = 2023;
         int quart = 1;
@@ -447,6 +443,5 @@ public class QuarterClassTest {
     }
 
 
-    */
     
 }
